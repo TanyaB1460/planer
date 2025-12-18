@@ -64,7 +64,6 @@ class PlanerApp {
         });
     }
 
-    // ===== ОПТИМИСТИЧНОЕ ДОБАВЛЕНИЕ ЗАДАЧИ =====
     addNewTask() {
         const taskText = this.taskInput.value.trim();
 
@@ -86,7 +85,6 @@ class PlanerApp {
             createdDate: new Date().toLocaleDateString('ru-RU')
         };
 
-        // 1. Мгновенно обновляем UI и localStorage
         this.tasksArray.push(newTask);
         this.saveTasksToStorage();
         this.taskInput.value = '';
@@ -95,11 +93,9 @@ class PlanerApp {
         this.updateStatistics();
         this.showNotification('Задача добавлена');
 
-        // 2. Фоном отправляем запрос (не блокирует UI)
         this.sendTaskToServer(newTask);
     }
 
-    // Упрощённый метод — только запрос + уведомления
     sendTaskToServer(taskData) {
         fetch('https://jsonplaceholder.typicode.com/todos', {
             method: 'POST',
@@ -112,14 +108,8 @@ class PlanerApp {
                 }
                 return response.json();
             })
-            .then(() => {
-                // Можно опционально показать «синхронизировано с сервером»
-                // this.showNotification('Задача синхронизирована с сервером');
-            })
             .catch(error => {
                 console.error('Ошибка при отправке задачи:', error);
-                // Тут можно показать мягкое предупреждение
-                // this.showNotification('Сервер недоступен, задача сохранена локально');
             });
     }
 
